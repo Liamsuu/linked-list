@@ -6,6 +6,11 @@ class LinkedList {
 
   append(value) {
     let currentNode = this.list;
+    if (currentNode.value === "HEAD") {
+      currentNode.setValue(value);
+
+      return;
+    }
     while (true) {
       if (currentNode.nextNode === null) {
         currentNode.setNextNode(new myNode());
@@ -20,14 +25,14 @@ class LinkedList {
   prepend(value) {
     const newNode = new myNode();
     newNode.setValue(value);
-    newNode.setNextNode(this.list.nextNode);
-    this.list.setNextNode(newNode);
+    newNode.setNextNode(this.list);
+    this.list = newNode;
     // works as expected!!
   }
 
   size() {
     let currentNode = this.list;
-    let loops = 0;
+    let loops = 1; // just to get the number of nodes instead, starting at 1 rather than 0
 
     while (true) {
       if (currentNode.nextNode === null) {
@@ -39,7 +44,7 @@ class LinkedList {
   }
 
   head() {
-    return this.list.nextNode;
+    return this.list;
   }
 
   tail() {
@@ -55,7 +60,7 @@ class LinkedList {
 
   at(index) {
     let currentNode = this.list;
-    for (let x = 0; x < index + 1; x++) {
+    for (let x = 0; x < index; x++) {
       currentNode = currentNode.nextNode;
     }
     return currentNode;
@@ -78,7 +83,40 @@ class LinkedList {
   }
 
   contains(value) {
-    // WRITE THIS TOMORROW. ALSO WRITE ERROR HANDLING IN THE CASE SOMEONE USES THE "at()" FUNCTION AND THAT INDEX DOES NOT EXIST SUCH AS WHEN ITS TOO LARGE OR LESS THAN 0
+    let currentNode = this.list;
+    for (let x = 0; x < this.size(); x++) {
+      if (currentNode.value === value) {
+        return true;
+      }
+      if (currentNode.nextNode === null) {
+        return false;
+      }
+      currentNode = currentNode.nextNode;
+    }
+  }
+
+  find(value) {
+    let currentNode = this.list;
+    for (let x = 0; x < this.size(); x++) {
+      if (currentNode.value === value) {
+        return x;
+      }
+      if (currentNode.nextNode === null) {
+        return null;
+      }
+      currentNode = currentNode.nextNode;
+    }
+  }
+
+  toString() {
+    let currentNode = this.list;
+    let stringValues = `( ${currentNode.value} )`;
+    for (let x = 0; x < this.size() - 1; x++) {
+      currentNode = currentNode.nextNode;
+      stringValues = stringValues + ` -> ( ${currentNode.value} )`;
+    }
+    stringValues += ` -> null`;
+    return stringValues;
   }
 }
 
@@ -95,27 +133,3 @@ class myNode {
     this.nextNode = node;
   }
 }
-
-const newList = new LinkedList(new myNode());
-
-// newList.list.setNextNode(new myNode());
-// newList.list.nextNode.setValue("second node");
-
-newList.append("second node");
-newList.append("third node");
-newList.append("fourth node");
-newList.prepend("should be at beginning of list");
-newList.prepend("nah i am");
-
-// console.log(newList.list);
-// console.log(newList.size());
-// console.log(newList.head());
-// console.log(newList.tail());
-
-console.log(newList.at(3));
-newList.pop();
-console.log(newList.at(3));
-
-// console.log(newList.list.nextNode);
-
-// MAYBE GET RID OF HEAD NDOE AND JUST HAVE THE FIRST NODE BE WHATEVER I ADD TO LIST FIRST. I WILL NEED TO CHANGE A COUPLE FUNCTIONS TO IMPLEMENT THIS
